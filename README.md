@@ -45,7 +45,7 @@ $ python3 val.py
 
 Put your results here showing the graphs got from [TUM online validation tool](https://cvg.cit.tum.de/data/datasets/rgbd-dataset/online_evaluation).
 
-
+Datset utilizado para validación: rgbd_dataset_freiburg3_walking_rpy_validation
 ## Entrenamiento 1 
 
 hidden_size = 1000
