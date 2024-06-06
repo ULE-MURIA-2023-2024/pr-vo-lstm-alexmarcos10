@@ -33,8 +33,24 @@ class VisualOdometryDataset(Dataset):
                 ground_truth_data = self.read_ground_truth(aux_path)
                 interpolated_ground_truth = self.interpolate_ground_truth(
                     rgb_paths, ground_truth_data)
+                
+
 
             # TODO: create sequences
+            for i in range(1, len(rgb_paths)-1, 2):
+
+                if not validation:
+                    pos_first_image = np.array(interpolated_ground_truth[i-1][1])
+                    pos_second_image = np.array(interpolated_ground_truth[i][1])
+                    difference = np.subtract(pos_second_image, pos_first_image)
+                else:
+                    difference = None
+
+                self.sequences.append((rgb_paths[i][0], 
+                                       rgb_paths[i][1], 
+                                       rgb_paths[i+1][0], 
+                                       rgb_paths[i+1][1], 
+                                       difference)) 
 
         self.transform = transform
         self.sequence_length = sequence_length
@@ -47,12 +63,30 @@ class VisualOdometryDataset(Dataset):
 
         # Load sequence of images
         sequence_images = []
-        ground_truth_pos = []
+        # ground_truth_pos = []
         timestampt = 0
 
-        # TODO: return the next sequence
+        _, path, timestamp, next_path, difference = self.sequences[idx]
 
-        return sequence_images, ground_truth_pos, timestampt
+        # Load images
+        imagen = cv2.imread(path)
+        next_imagen = cv2.imread(next_path)
+
+        imagen = cv2.cvtColor(imagen, cv2.COLOR_BGR2RGB)
+        next_imagen = cv2.cvtColor(next_imagen, cv2.COLOR_BGR2RGB)
+
+        imagen = self.transform(imagen)
+        next_imagen = self.transform(next_imagen)
+
+        sequence_images.append(imagen)
+        sequence_images.append(next_imagen)
+
+        
+        timestampt = timestamp
+
+        sequence_images = torch.stack(sequence_images)
+
+        return (sequence_images, torch.Tensor([0]), timestampt) if difference is None else (sequence_images, torch.Tensor(difference), timestampt)
 
     def read_images_paths(self, dataset_path: str) -> Tuple[float, str]:
 

@@ -44,3 +44,53 @@ $ python3 val.py
 ## Results
 
 Put your results here showing the graphs got from [TUM online validation tool](https://cvg.cit.tum.de/data/datasets/rgbd-dataset/online_evaluation).
+
+
+## Entrenamiento 1 
+
+hidden_size = 1000
+num_layers = 2
+bidirectional = False
+lstm_dropout = 0.3
+
+sequence_length = 2
+batch_size = 16
+
+learning_rate = 0.001
+epochs = 2
+
+
+
+
+
+
+
+
+
+
+## Entrenamiento 2
+hidden_size = 500
+num_layers = 2
+bidirectional = True
+lstm_dropout = 0.3
+
+
+sequence_length = 2
+batch_size = 16
+
+
+learning_rate = 0.001
+epochs = 2
+
+
+
+
+
+
+
+
+## Entrenamiento 3
+
+
+
+
